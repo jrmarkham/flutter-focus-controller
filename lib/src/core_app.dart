@@ -18,8 +18,7 @@ class CoreApp extends StatelessWidget {
 
     final FocusControllerCubit fmCubit = FocusControllerCubit(initMainNodeList: mList, initSecondaryNodeList: sList);
 
-
-    Future.delayed(const Duration(milliseconds: 2750), ()=> fmCubit.state.secondaryNodeList[4].requestFocus());
+    Future.delayed(const Duration(milliseconds: 2750), () => fmCubit.state.secondaryNodeList[4].requestFocus());
 
     return BlocListener<FocusControllerCubit, FocusControllerCubitState>(
       bloc: fmCubit,
@@ -68,7 +67,8 @@ class CoreApp extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100.0), border: Border.all(color: Colors.blueGrey, width: 4)),
               child: BlocBuilder<FocusControllerCubit, FocusControllerCubitState>(
                   bloc: fmCubit,
-                  buildWhen: (FocusControllerCubitState prev, FocusControllerCubitState curr) => prev.mainNodeList != curr.mainNodeList,
+                  buildWhen: (FocusControllerCubitState prev, FocusControllerCubitState curr) =>
+                      prev.mainNodeList != curr.mainNodeList,
                   builder: (BuildContext context, FocusControllerCubitState state) {
                     return SingleChildScrollView(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -93,10 +93,7 @@ class CoreApp extends StatelessWidget {
                                             name: '$idx sub $jdx ',
                                             focusNode: state.secondaryNodeList[idx],
                                             focusCallback: () => fmCubit.setIsMain(false))
-                                        : FocusBoxItem(
-                                            name: '$idx sub $jdx ',
-                                            focusNode: FocusNode()
-                                          )
+                                        : FocusBoxItem(name: '$idx sub $jdx ', focusNode: FocusNode())
                                 ],
                               )
                             ],

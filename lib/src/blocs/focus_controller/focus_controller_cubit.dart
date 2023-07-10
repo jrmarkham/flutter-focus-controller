@@ -18,8 +18,9 @@ class FocusControllerCubit extends Cubit<FocusControllerCubitState> {
       updateIsChannel != state.isMain ? emit(state.copyWith(updateIsChannel: updateIsChannel)) : null;
 
   void down() => emit(state.copyWith(
-      updateFocusPosition: state.focusPosition == state.mainNodeList.length - 1 ?  state.mainNodeList.length - 1 : state.focusPosition + 1));
+      updateFocusPosition: state.focusPosition == state.mainNodeList.length - 1
+          ? state.mainNodeList.length - 1
+          : state.focusPosition + 1));
 
-  void up() => emit(state.copyWith(
-      updateFocusPosition: state.focusPosition == 0 ? 0 : state.focusPosition - 1));
+  void up() => emit(state.copyWith(updateFocusPosition: state.focusPosition == 0 ? 0 : state.focusPosition - 1));
 }

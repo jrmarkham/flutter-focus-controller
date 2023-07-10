@@ -3,10 +3,9 @@ import 'package:flutter/services.dart';
 import 'src/core_app.dart';
 
 void main() {
-  runApp(
-      Shortcuts(
-        shortcuts: <LogicalKeySet, Intent>{LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent()},
-        child: const MyApp()));
+  runApp(Shortcuts(
+      shortcuts: <LogicalKeySet, Intent>{LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent()},
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,5 +24,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
