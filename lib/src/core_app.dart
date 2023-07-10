@@ -9,31 +9,31 @@ class CoreApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<FocusNode> cList = [];
-    final List<FocusNode> tl1List = [];
+    final List<FocusNode> mList = [];
+    final List<FocusNode> sList = [];
     for (int idx = 0; idx < 50; idx++) {
-      cList.add(FocusNode());
-      tl1List.add(FocusNode());
+      mList.add(FocusNode());
+      sList.add(FocusNode());
     }
 
-    final FocusControllerCubit fmCubit = FocusControllerCubit(initChannelNodeList: cList, initTimelineNodeList: tl1List);
+    final FocusControllerCubit fmCubit = FocusControllerCubit(initMainNodeList: mList, initSecondaryNodeList: sList);
 
 
-    Future.delayed(Duration(milliseconds: 2750), ()=> fmCubit.state.firstTimeline[4].requestFocus());
+    Future.delayed(const Duration(milliseconds: 2750), ()=> fmCubit.state.secondaryNodeList[4].requestFocus());
 
     return BlocListener<FocusControllerCubit, FocusControllerCubitState>(
       bloc: fmCubit,
       listenWhen: (FocusControllerCubitState prev, FocusControllerCubitState curr) =>
-          curr.status == FMSStatus.positionChange || prev.isChannel != curr.isChannel,
+          curr.status == FMSStatus.positionChange || prev.isMain != curr.isMain,
       listener: (BuildContext context, FocusControllerCubitState state) {
-        debugPrint('BlocListener state $state isChannel ${state.isChannel}');
+        debugPrint('BlocListener state $state isMain ${state.isMain}');
 
-        if (state.status == FMSStatus.positionChange && state.channelNode.isNotEmpty) {
-          debugPrint('BlocListener update focus position ${state.focusPosition} isChannel ${state.isChannel}');
+        if (state.status == FMSStatus.positionChange && state.mainNodeList.isNotEmpty) {
+          debugPrint('BlocListener update focus position ${state.focusPosition} isMain ${state.isMain}');
           FocusScope.of(context).unfocus();
-          state.isChannel
-              ? state.channelNode[state.focusPosition].requestFocus()
-              : state.firstTimeline[state.focusPosition].requestFocus();
+          state.isMain
+              ? state.mainNodeList[state.focusPosition].requestFocus()
+              : state.secondaryNodeList[state.focusPosition].requestFocus();
         }
 
         // TODO: implement listener
@@ -68,19 +68,19 @@ class CoreApp extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100.0), border: Border.all(color: Colors.blueGrey, width: 4)),
               child: BlocBuilder<FocusControllerCubit, FocusControllerCubitState>(
                   bloc: fmCubit,
-                  buildWhen: (FocusControllerCubitState prev, FocusControllerCubitState curr) => prev.channelNode != curr.channelNode,
+                  buildWhen: (FocusControllerCubitState prev, FocusControllerCubitState curr) => prev.mainNodeList != curr.mainNodeList,
                   builder: (BuildContext context, FocusControllerCubitState state) {
                     return SingleChildScrollView(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                        for (int idx = 0; idx < state.channelNode.length; idx++)
+                        for (int idx = 0; idx < state.mainNodeList.length; idx++)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               FocusBoxItem(
-                                name: 'channel $idx ',
-                                focusNode: state.channelNode[idx],
+                                name: 'main $idx ',
+                                focusNode: state.mainNodeList[idx],
                                 autoFocus: idx == 5,
-                                focusCallback: () => fmCubit.setIsChannel(true),
+                                focusCallback: () => fmCubit.setIsMain(true),
                               ),
                               const SizedBox(width: 10),
                               Row(
@@ -90,11 +90,11 @@ class CoreApp extends StatelessWidget {
                                   for (int jdx = 0; jdx < 5; jdx++)
                                     jdx == 0
                                         ? FocusBoxItem(
-                                            name: '$idx timeline $jdx ',
-                                            focusNode: state.firstTimeline[idx],
-                                            focusCallback: () => fmCubit.setIsChannel(false))
+                                            name: '$idx sub $jdx ',
+                                            focusNode: state.secondaryNodeList[idx],
+                                            focusCallback: () => fmCubit.setIsMain(false))
                                         : FocusBoxItem(
-                                            name: '$idx timeline $jdx ',
+                                            name: '$idx sub $jdx ',
                                             focusNode: FocusNode()
                                           )
                                 ],

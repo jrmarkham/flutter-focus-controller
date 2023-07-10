@@ -5,28 +5,28 @@ enum FMSStatus { init, dataUpdate, positionChange }
 @immutable
 class FocusControllerCubitState {
   final FMSStatus status;
-  final bool isChannel;
+  final bool isMain;
   final int focusPosition;
-  final List<FocusNode> channelNode;
-  final List<FocusNode> firstTimeline;
+  final List<FocusNode> mainNodeList;
+  final List<FocusNode> secondaryNodeList;
   final FocusNode? activeNode;
 
   const FocusControllerCubitState(
       {required this.status,
-      required this.isChannel,
+      required this.isMain,
       required this.focusPosition,
-      required this.channelNode,
-      required this.firstTimeline,
+      required this.mainNodeList,
+      required this.secondaryNodeList,
       this.activeNode});
 
   static FocusControllerCubitState init(
-          {required List<FocusNode> initChannelNodeList, required List<FocusNode> initTimelineNodeList}) =>
+          {required List<FocusNode> initMainNodeList, required List<FocusNode> initSecondaryNodeList}) =>
       FocusControllerCubitState(
           status: FMSStatus.init,
-          isChannel: true,
+          isMain: true,
           focusPosition: 0,
-          channelNode: initChannelNodeList,
-          firstTimeline: initTimelineNodeList);
+          mainNodeList: initMainNodeList,
+          secondaryNodeList: initSecondaryNodeList);
 
   FocusControllerCubitState copyWith(
           {int? updateFocusPosition,
@@ -37,8 +37,8 @@ class FocusControllerCubitState {
       FocusControllerCubitState(
           status: updateFocusPosition == null ? FMSStatus.dataUpdate : FMSStatus.positionChange,
           focusPosition: updateFocusPosition ?? focusPosition,
-          channelNode: updateChannelNode ?? channelNode,
-          firstTimeline: updateFirstTimelineNode ?? firstTimeline,
-          isChannel: updateIsChannel ?? isChannel,
+          mainNodeList: updateChannelNode ?? mainNodeList,
+          secondaryNodeList: updateFirstTimelineNode ?? secondaryNodeList,
+          isMain: updateIsChannel ?? isMain,
           activeNode: updateActiveNote ?? activeNode);
 }
